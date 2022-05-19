@@ -1,0 +1,15 @@
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.csprojAssemblyReference.cache
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.GeneratedMSBuildEditorConfig.editorconfig
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.AssemblyInfoInputs.cache
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.AssemblyInfo.cs
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.csproj.CoreCompileInputs.cache
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/Code.deps.json
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/Code.runtimeconfig.json
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/Code.runtimeconfig.dev.json
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/Code.dll
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/ref/Code.dll
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/Code.pdb
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.dll
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/ref/Code.dll
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.pdb
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.genruntimeconfig.cache
