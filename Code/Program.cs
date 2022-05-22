@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace RAD_Project {
@@ -12,7 +12,27 @@ namespace RAD_Project {
             ulong t = mult_modprime_hash(1513);
             System.Console.WriteLine(t);
 
-            IEnumerable<Tuple<ulong, int>> hi = CreateStream(50, 64);
+
+            ulong hash_sum = 0;
+            IEnumerable<Tuple<ulong, int>> data_stream = CreateStream(10000, 500000);
+            var watch = Stopwatch.StartNew();
+            foreach(Tuple<ulong, int> key in data_stream) {
+                hash_sum += mult_shift_hash(key.Item1);
+            }
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            System.Console.WriteLine(hash_sum);
+            System.Console.WriteLine(elapsedMs + " ms");
+
+            hash_sum = 0;
+            watch.Restart();
+            foreach(Tuple<ulong, int> key in data_stream) {
+                hash_sum += mult_modprime_hash(key.Item1);
+            }
+            elapsedMs = watch.ElapsedMilliseconds;
+            System.Console.WriteLine(elapsedMs + " ms");
+            System.Console.WriteLine(hash_sum);
+            
         }
 
         public static ulong mult_shift_hash(ulong key) {
