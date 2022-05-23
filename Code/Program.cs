@@ -10,12 +10,7 @@ namespace RAD_Project {
             int l = 26;
             hash_functions functions = new hash_functions();
             // Creating stream of data tuples
-            IEnumerable<Tuple<ulong, int>> data_stream = CreateStream(1000, (int)Math.Pow(2, l));
-
-            ulong shift_test = functions.mult_shift_hash(5780);
-            Console.WriteLine(shift_test);
-            ulong prime_test = functions.mult_modprime_hash(1513);
-            System.Console.WriteLine(prime_test);
+            IEnumerable<Tuple<ulong, int>> data_stream = CreateStream(50000000, l);
 
             // Problem 1(c) - Testing runtime of Hash functions
             test_hashfunc_time(functions, data_stream);
@@ -56,25 +51,26 @@ namespace RAD_Project {
         }
 
         public static void test_hashfunc_time(hash_functions functions, IEnumerable<Tuple<ulong, int>> stream) {
+            // Testing Multiply-Shift Hash function for stream
             ulong hash_sum = 0;
             var watch = Stopwatch.StartNew();
-            System.Console.WriteLine(stream);
             foreach(Tuple<ulong, int> key in stream) {
                 hash_sum += functions.mult_shift_hash(key.Item1);
             }
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine("Multiply-Shift Time: " + elapsedMs + " ms");
+            Console.WriteLine("Multiply-Shift Time: " + elapsedMs + "ms");
             Console.WriteLine(hash_sum);
 
-            ulong hash_sum2 = 0;
+            // Testing Multiply-ModPrime Hash function for stream
+            hash_sum = 0;
             watch.Restart();
             foreach(Tuple<ulong, int> key in stream) {
-                hash_sum2 += functions.mult_modprime_hash(key.Item1);
+                hash_sum += functions.mult_modprime_hash(key.Item1);
             }
             elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine("Multiply-Mod-Prime Time: " + elapsedMs + " ms");
-            Console.WriteLine(hash_sum2);
+            Console.WriteLine("Multiply-Mod-Prime Time: " + elapsedMs + "ms");
+            Console.WriteLine(hash_sum);
         }
     }
 }
