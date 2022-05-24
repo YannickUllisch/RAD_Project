@@ -6,18 +6,23 @@ using System.Numerics;
 namespace RAD_Project {
     public class project_main {
 
+        // ASK ABOUT:
+        // Da x findes flere gange i strømmen, har de så altid samme data værdi?
+        // Ellers er det jo rimelig svært at finde data værdien for at incrementere
+        // Spørg hvorfor dataen hele tiden ændrer sig uden at vi laver noget ift den
         static void Main(string[] args) {
             int l = 26;
-            hash_functions functions = new hash_functions();
+            IHashFunction shift_hash = new MultShiftHash(l);
+            IHashFunction modprime_hash = new MultModPrimeHash(l);
             // Creating stream of data tuples
-            IEnumerable<Tuple<ulong, int>> data_stream = CreateStream(50000000, l);
+            IEnumerable<Tuple<ulong, int>> data_stream = CreateStream(6000000, 20);
 
             // Problem 1(c) - Testing runtime of Hash functions
-            test_hashfunc_time(functions, data_stream);
+            //test_hashfunc_time(shift_hash, modprime_hash, data_stream);
 
             // Initializing Hash Table of size 2^l
-            hash_table table = new hash_table();
-            table.init_table((int)Math.Pow(2, l));
+            int test = sum_of_squares(data_stream, shift_hash, l);
+            System.Console.WriteLine(test);
         }
 
         public static IEnumerable<Tuple<ulong, int>> CreateStream(int n, int l) {
@@ -50,12 +55,12 @@ namespace RAD_Project {
             }
         }
 
-        public static void test_hashfunc_time(hash_functions functions, IEnumerable<Tuple<ulong, int>> stream) {
+        public static void test_hashfunc_time(IHashFunction mult_hash, IHashFunction prime_hash, IEnumerable<Tuple<ulong, int>> stream) {
             // Testing Multiply-Shift Hash function for stream
             ulong hash_sum = 0;
             var watch = Stopwatch.StartNew();
             foreach(Tuple<ulong, int> key in stream) {
-                hash_sum += functions.mult_shift_hash(key.Item1);
+                hash_sum += mult_hash.hash_function(key.Item1);
             }
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -66,11 +71,30 @@ namespace RAD_Project {
             hash_sum = 0;
             watch.Restart();
             foreach(Tuple<ulong, int> key in stream) {
-                hash_sum += functions.mult_modprime_hash(key.Item1);
+                hash_sum += prime_hash.hash_function(key.Item1);
             }
             elapsedMs = watch.ElapsedMilliseconds;
             Console.WriteLine("Multiply-Mod-Prime Time: " + elapsedMs + "ms");
             Console.WriteLine(hash_sum);
+        }
+
+        public static int sum_of_squares(IEnumerable<Tuple<ulong, int>> stream, IHashFunction hash, int l) {
+            hash_table hashTable = new hash_table(hash, l);
+            double sum = 0;
+            foreach (Tuple<ulong, int> key in stream) {
+                hashTable.insert(key);
+                sum += Math.Pow(hashTable.get(key.Item1), 2.0);
+                //sum += hashTable.get(key.Item1);  
+            }
+            System.Console.WriteLine("test: " + hashTable.test);
+            double testsum = 0;
+            foreach (Tuple<ulong, int> key in stream) {
+
+                testsum += Math.Pow(hashTable.get(key.Item1), 2.0);
+                //sum += hashTable.get(key.Item1);  
+            }
+            System.Console.WriteLine(testsum);
+            return (int)sum;
         }
     }
 }
