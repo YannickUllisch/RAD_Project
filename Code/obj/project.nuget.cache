@@ -1,8 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "rs9p11BwYCvaIWm6NX7LS6Slnv1jMXcl9tZAjIYOPGshYRH7vdy+MiLuKxUqfOKOAPsc8ZBxDdslOx0aEIvrPQ==",
+  "dgSpecHash": "4bkj7ANK4qqAZF3LWjj7OSwg/uuOGLxFduLBk1JVvq0hgd9HxgoPZUfP3COrLCpo7gdzwR66YjPPX4ket78njQ==",
   "success": true,
   "projectFilePath": "/Users/yannick/Documents/GitHub/RAD_Project/Code/Code.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "expectedPackageFiles": [
+    "/Users/yannick/.nuget/packages/csvhelper/27.2.1/csvhelper.27.2.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU3028",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'CsvHelper 27.2.1' from source 'https://api.nuget.org/v3/index.json': The repository primary signature's timestamp found a chain building issue: ExplicitDistrust: The trust setting for this policy was set to Deny.",
+      "libraryId": "CsvHelper"
+    }
+  ]
 }

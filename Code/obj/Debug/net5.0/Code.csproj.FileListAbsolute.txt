@@ -13,3 +13,5 @@
 /Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/ref/Code.dll
 /Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.pdb
 /Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.genruntimeconfig.cache
+/Users/yannick/Documents/GitHub/RAD_Project/Code/bin/Debug/net5.0/CsvHelper.dll
+/Users/yannick/Documents/GitHub/RAD_Project/Code/obj/Debug/net5.0/Code.csproj.CopyComplete
