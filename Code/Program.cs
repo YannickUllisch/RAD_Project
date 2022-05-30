@@ -24,29 +24,15 @@ namespace RAD_Project {
             // Task 3 - Calculating sum of squares for different streams with HashTable.
             int[] lval_arr = new int[] {16, 20, 22, 24, 26, 28};
             //hashtable_time_complexity(lval_arr, 268435456);
-            IEnumerable<Tuple<ulong, int>> stream = CreateStream(50, 15);
-            Tuple<List<ulong>, ulong> estimates = CS_Experiments(stream, 15);
-            sorted_experiment_plot(estimates.Item1, estimates.Item2);
-            unsorted_experiment_plot(estimates.Item1, estimates.Item2);
-            var writer = new StreamWriter("test.csv");
-            using (TextWriter sw = new StreamWriter("D:\\files.csv"))
-            {
-                string strData = "Zaara";
-                float floatData = 324.563F;//Note it's a float not string
-                sw.WriteLine("{0},{1}", strData, floatData.ToString("F2"));
-            }
+            
             // Task 7 and 8 - Experiments 
-            /*int[] tval_arr = new int[] {26, 20, 23};
+            int[] tval_arr = new int[] {26, 18, 22};
             for (int i = 0; i < tval_arr.Length; i++) {
                 IEnumerable<Tuple<ulong, int>> stream = CreateStream(268435, tval_arr[i]);
                 Tuple<List<ulong>, ulong> estimates = CS_Experiments(stream, tval_arr[i]);
-                sorted_experiment_plot(estimates.Item1, estimates.Item2);
-                unsorted_experiment_plot(estimates.Item1, estimates.Item2);
-                TextWriter sw = new StreamWriter ("Data1.csv");
-                var writer = new StreamWriter("test.csv");
-                var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-                csv.WriteRecords(estimates.Item1);
-            }*/
+                sorted_experiment_tocsv(estimates.Item1, estimates.Item2, i);
+                unsorted_experiment_tocsv(estimates.Item1, estimates.Item2, i);
+            }
         }
 
         public static IEnumerable<Tuple<ulong, int>> CreateStream(int n, int l) {
@@ -162,7 +148,7 @@ namespace RAD_Project {
             ulong trueEstimate = 0;
             List<ulong> estimators = new List<ulong>();
             IHashFunction shift_hash = new MultShiftHash(t);
-            int num_iterations = 5;
+            int num_iterations = 16;
 
             for (int i = 0; i < num_iterations; i++) {
                 if (trueEstimate == 0) {
@@ -185,10 +171,23 @@ namespace RAD_Project {
         /// <summary> Plots the sorted list of estimates aswell as the true estimate </summary>
         /// <param name="estimates"> A list of estimates for S </param>
         /// <param name="trueEstimate"> The true estimate for S </param>
-        public static void sorted_experiment_plot(List<ulong> estimates, ulong trueEstimate) {
-            var sortedList = estimates.OrderBy(i => i).ToList();
-            System.Console.WriteLine(MSE(sortedList, trueEstimate));
+        /// <param name="iteration"> Keeping track of iteratio number for naming of csvs </param>
+        public static void sorted_experiment_tocsv(List<ulong> estimates, ulong trueEstimate, int iteration) {
+            List<ulong> sortedList = estimates.OrderBy(i => i).ToList();
+            List<Tuple<ulong, int>> numberedList = new List<Tuple<ulong, int>>();
+            for (int i = 1; i<=sortedList.Count; i++) {
+                numberedList.Add(Tuple.Create(sortedList[i-1],i));
+            }
+            
+            // Printing MSE value
+            System.Console.WriteLine("MSE for experiment "+(iteration+1)+" is "+ MSE(sortedList, trueEstimate));
 
+            // Writing into csv file
+            using (TextWriter sw = new StreamWriter((iteration+1)+"sorted.csv")) {
+                foreach (Tuple<ulong, int> key in numberedList) {
+                    sw.WriteLine("{0},{1},{2}", key.Item1, key.Item2, trueEstimate);
+                }
+            }
         }
 
         /// <summary>
@@ -197,18 +196,38 @@ namespace RAD_Project {
         /// </summary>
         /// <param name="estimates"> A list of estimates for S </param>
         /// <param name="trueEstimate"> The true estimate for S </param>
-        public static void unsorted_experiment_plot(List<ulong> estimates, ulong trueEstimate) {
+        /// <param name="iteration"> Keeping track of iteratio number for naming of csvs </param>
+        public static void unsorted_experiment_tocsv(List<ulong> estimates, ulong trueEstimate, int iteration) {
             int partitionSize = 11;
             List<List<ulong>> partitions = new List<List<ulong>>();
- 
+            // Partitioning into smaller sized lists
             for (int i=0; i<estimates.Count; i+=partitionSize) {
                 partitions.Add(estimates.GetRange(i, Math.Min(partitionSize, estimates.Count - i)));
-            }
+            }   
 
+            // Sorting all partitions
+            for (int i = 0; i<partitions.Count; i++) {
+                partitions[i] = partitions[i].OrderBy(x => x).ToList();
+            }
+            // Extracting all median values and sorting them
+            List<ulong> medianValues = new List<ulong>();
             foreach(List<ulong> subList in partitions) {
-                
+                medianValues.Add(subList[(subList.Count)/2]);
+            }
+            medianValues = medianValues.OrderBy(x => x).ToList();
+
+            // Giving each median value an ascending order integer for plotting
+            List<Tuple<ulong, int>> numberedMedianList = new List<Tuple<ulong, int>>();
+            for (int i = 1; i<=medianValues.Count; i++) {
+                numberedMedianList.Add(Tuple.Create(medianValues[i-1],i));
             }
 
+            // Writing into csv file
+            using (TextWriter sw = new StreamWriter((iteration+1)+"medians.csv")) {
+                foreach (Tuple<ulong, int> key in numberedMedianList) {
+                    sw.WriteLine("{0},{1},{2}", key.Item1, key.Item2, trueEstimate);
+                }
+            }
         }
 
         /// <summary>
