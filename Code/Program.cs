@@ -27,11 +27,11 @@ namespace RAD_Project {
             
             // Task 7 and 8 - Experiments 
             int[] tval_arr = new int[] {26, 18, 22};
+            IEnumerable<Tuple<ulong, int>> stream = CreateStream(268435, 26);
             for (int i = 0; i < tval_arr.Length; i++) {
-                IEnumerable<Tuple<ulong, int>> stream = CreateStream(268435, tval_arr[i]);
                 Tuple<List<ulong>, ulong> estimates = CS_Experiments(stream, tval_arr[i]);
                 sorted_experiment_tocsv(estimates.Item1, estimates.Item2, i);
-                unsorted_experiment_tocsv(estimates.Item1, estimates.Item2, i);
+                partitioned_medians_tocsv(estimates.Item1, estimates.Item2, i);
             }
         }
 
@@ -145,16 +145,17 @@ namespace RAD_Project {
         /// A tuple consisting of a List of Estimates via count sketch as Item1 and the true estimate as Item2. 
         /// </returns>
         public static Tuple<List<ulong>, ulong> CS_Experiments(IEnumerable<Tuple<ulong, int>> stream, int t) {
+            var watch = Stopwatch.StartNew();
             ulong trueEstimate = 0;
             List<ulong> estimators = new List<ulong>();
             IHashFunction shift_hash = new MultShiftHash(t);
-            int num_iterations = 16;
+            // Sets number of estimates we calculate
+            int num_iterations = 100;
 
             for (int i = 0; i < num_iterations; i++) {
                 if (trueEstimate == 0) {
                     trueEstimate = (sum_of_squares(stream, shift_hash, t)).Item1;
                 }
-                System.Console.WriteLine(i);
                 IHashFunction hash = new FourUniversalHash();
                 CountSketchHash sketch_hash = new CountSketchHash();
                 CountSketch CS = new CountSketch(sketch_hash);
@@ -165,6 +166,9 @@ namespace RAD_Project {
 
                 estimators.Add(CS.BCS_Estimator());
             }
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds / num_iterations;
+            System.Console.WriteLine("Elapsed time for Count Sketch with m=2^"+t+" is "+elapsedMs+"ms");
             return Tuple.Create(estimators, trueEstimate);
         }
 
@@ -184,6 +188,7 @@ namespace RAD_Project {
 
             // Writing into csv file
             using (TextWriter sw = new StreamWriter((iteration+1)+"sorted.csv")) {
+                sw.WriteLine("{0},{1},{2}", "estimate", "iteration", "trueval");
                 foreach (Tuple<ulong, int> key in numberedList) {
                     sw.WriteLine("{0},{1},{2}", key.Item1, key.Item2, trueEstimate);
                 }
@@ -197,7 +202,7 @@ namespace RAD_Project {
         /// <param name="estimates"> A list of estimates for S </param>
         /// <param name="trueEstimate"> The true estimate for S </param>
         /// <param name="iteration"> Keeping track of iteratio number for naming of csvs </param>
-        public static void unsorted_experiment_tocsv(List<ulong> estimates, ulong trueEstimate, int iteration) {
+        public static void partitioned_medians_tocsv(List<ulong> estimates, ulong trueEstimate, int iteration) {
             int partitionSize = 11;
             List<List<ulong>> partitions = new List<List<ulong>>();
             // Partitioning into smaller sized lists
@@ -224,6 +229,7 @@ namespace RAD_Project {
 
             // Writing into csv file
             using (TextWriter sw = new StreamWriter((iteration+1)+"medians.csv")) {
+                sw.WriteLine("{0},{1},{2}", "estimate", "iteration", "trueval");
                 foreach (Tuple<ulong, int> key in numberedMedianList) {
                     sw.WriteLine("{0},{1},{2}", key.Item1, key.Item2, trueEstimate);
                 }
@@ -236,13 +242,13 @@ namespace RAD_Project {
         /// <param name="estimates"> A list of estimates for S </param>
         /// <param name="trueEstimate"> The true estimate for S </param>
         /// <returns> The Mean Square error value </returns>
-        public static ulong MSE(List<ulong> estimates, ulong trueEstimate) {
-            ulong MSE = 0;
+        public static long MSE(List<ulong> estimates, ulong trueEstimate) {
+            long MSE = 0;
 
             for(int i = 0; i < estimates.Count; i++) {
-                MSE += (ulong)Math.Pow((estimates[i] - trueEstimate), 2);
+                MSE += (long)Math.Pow(((long)estimates[i] - (long)trueEstimate), 2);
             }
-            MSE = MSE / (ulong)estimates.Count;
+            MSE = MSE / (long)estimates.Count;
             return MSE;
         }
     }
