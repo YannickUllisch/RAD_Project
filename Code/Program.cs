@@ -5,7 +5,6 @@ using System.Numerics;
 using System.Linq;
 using CsvHelper;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
@@ -25,15 +24,29 @@ namespace RAD_Project {
             // Task 3 - Calculating sum of squares for different streams with HashTable.
             int[] lval_arr = new int[] {16, 20, 22, 24, 26, 28};
             //hashtable_time_complexity(lval_arr, 268435456);
-
+            IEnumerable<Tuple<ulong, int>> stream = CreateStream(50, 15);
+            Tuple<List<ulong>, ulong> estimates = CS_Experiments(stream, 15);
+            sorted_experiment_plot(estimates.Item1, estimates.Item2);
+            unsorted_experiment_plot(estimates.Item1, estimates.Item2);
+            var writer = new StreamWriter("test.csv");
+            using (TextWriter sw = new StreamWriter("D:\\files.csv"))
+            {
+                string strData = "Zaara";
+                float floatData = 324.563F;//Note it's a float not string
+                sw.WriteLine("{0},{1}", strData, floatData.ToString("F2"));
+            }
             // Task 7 and 8 - Experiments 
-            int[] tval_arr = new int[] {26, 20, 23};
+            /*int[] tval_arr = new int[] {26, 20, 23};
             for (int i = 0; i < tval_arr.Length; i++) {
                 IEnumerable<Tuple<ulong, int>> stream = CreateStream(268435, tval_arr[i]);
                 Tuple<List<ulong>, ulong> estimates = CS_Experiments(stream, tval_arr[i]);
                 sorted_experiment_plot(estimates.Item1, estimates.Item2);
                 unsorted_experiment_plot(estimates.Item1, estimates.Item2);
-            }
+                TextWriter sw = new StreamWriter ("Data1.csv");
+                var writer = new StreamWriter("test.csv");
+                var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                csv.WriteRecords(estimates.Item1);
+            }*/
         }
 
         public static IEnumerable<Tuple<ulong, int>> CreateStream(int n, int l) {
@@ -149,7 +162,7 @@ namespace RAD_Project {
             ulong trueEstimate = 0;
             List<ulong> estimators = new List<ulong>();
             IHashFunction shift_hash = new MultShiftHash(t);
-            int num_iterations = 23;
+            int num_iterations = 5;
 
             for (int i = 0; i < num_iterations; i++) {
                 if (trueEstimate == 0) {
@@ -195,6 +208,7 @@ namespace RAD_Project {
             foreach(List<ulong> subList in partitions) {
                 
             }
+
         }
 
         /// <summary>

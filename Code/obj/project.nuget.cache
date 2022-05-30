@@ -6,13 +6,5 @@
   "expectedPackageFiles": [
     "/Users/yannick/.nuget/packages/csvhelper/27.2.1/csvhelper.27.2.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU3028",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'CsvHelper 27.2.1' from source 'https://api.nuget.org/v3/index.json': The repository primary signature's timestamp found a chain building issue: ExplicitDistrust: The trust setting for this policy was set to Deny.",
-      "libraryId": "CsvHelper"
-    }
-  ]
+  "logs": []
 }
