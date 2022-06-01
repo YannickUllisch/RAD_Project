@@ -19,11 +19,11 @@ namespace RAD_Project {
             IEnumerable<Tuple<ulong, int>> data_stream = CreateStream(999999, l);
             IHashFunction shift_hash = new MultShiftHash(l);
             IHashFunction modprime_hash = new MultModPrimeHash(l);
-            //hashfunc_time(shift_hash, modprime_hash, data_stream);
+            hashfunc_time(shift_hash, modprime_hash, data_stream);
 
             // Task 3 - Calculating sum of squares for different streams with HashTable.
             int[] lval_arr = new int[] {16, 20, 22, 24, 26, 28};
-            //hashtable_time_complexity(lval_arr, 268435456);
+            hashtable_time_complexity(lval_arr, 268435456);
             
             // Task 7 and 8 - Experiments 
             int[] tval_arr = new int[] {26, 18, 22};
