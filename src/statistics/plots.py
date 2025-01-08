@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import pandas as pd
 
-data = pd.read_csv('3medians.csv', delimiter=',')
+data = pd.read_csv('../3medians.csv', delimiter=',')
 
 plt.scatter(data['iteration'], data['estimate'], s=100, alpha=0.6, edgecolor='black', linewidth=1)
 plt.scatter(data['iteration'], data['trueval'], edgecolor='red')

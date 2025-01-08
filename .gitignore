@@ -1,6 +1,6 @@
 **/.vscode/
-**/bin/
-**/obj/
+**/bin/**
+**/obj/**
 
 # Prerequisites
 *.d
@@ -58,3 +58,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
